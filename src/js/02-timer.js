@@ -16,6 +16,7 @@ butStart.addEventListener("click", timer);
 const currentData = new Date()
 let userData;
 flatpickr(datPic, options)
+
 options = {
   enableTime: true,
   time_24hr: true,
