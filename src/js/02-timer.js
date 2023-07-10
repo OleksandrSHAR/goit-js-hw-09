@@ -5,7 +5,7 @@ import Notiflix from 'notiflix';
 
 const datPic = document.querySelector("#datetime-picker");
 const butStart = document.querySelector("button[data-start]");
-const datDay = document.querySelector("span[data-start]");
+const datDay = document.querySelector("span[data-days]");
 const datHau = document.querySelector("span[data-hours]");
 const datMin = document.querySelector("span[data-minutes]");
 const datSec = document.querySelector("span[data-seconds]");
@@ -15,53 +15,56 @@ butStart.addEventListener("click", timer);
 
 const currentData = new Date()
 let userData;
-flatpickr(datPic, options)
 
-options = {
+function convertMs(ms) {
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  return { days, hours, minutes, seconds };
+}
+
+const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: currentData,
   minuteIncrement: 1,
   onClose(selectedDates) {
       userData=selectedDates[0];
-      if (currentData > userData) {
+    if (currentData < userData) {
+        butStart.disabled = false;
         Notiflix.Notify.info("Great, now choose a date you don't want to miss😎");
-      } else {
-          Notiflix.Notify.warning("Error! I'm afraid the time machine hasn't been invented yet ¯\_(ツ)_/¯ ");
-        butStart.classList.remuve("button--inactive");
+      } else if (currentData>userData) {
+      butStart.disabled = true;
+      Notiflix.Notify.warning("Error! I'm afraid the time machine hasn't been invented yet ¯\_(ツ)_/¯ ");
+        butStart.classList.remove("button--inactive");
       }
     
   },
 };
+flatpickr(datPic, options)
 function timer() {
-    const id = setInterval(() => {
-        const timerTime = convertMs(userData - currentData)
-    if (timerTime.seconds>=0) {
-        datDay.textContent = timerTime.days.toString().padStart(2, "0");
-        datHau.textContent = timerTime.hours.toString().padStart(2, "0");  
-        datMin.textContent = timerTime.minutes.toString().padStart(2, "0");  
-         datSec.textContent = timerTime.seconds.toString().padStart(2, "0");  
-    } else {
-        clearInterval(id);
-        Notiflix.Notify.info("job done time is up");
-    }    
-    })
-}
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
+  const id = setInterval(() => {
+    
+    const timerTime = userData - Date.now();
+    const { days, hours, minutes, seconds } = convertMs(timerTime);
+    
+      datDay.textContent = tamerZero(days);
+      datHau.textContent = tamerZero(hours);
+      datMin.textContent = tamerZero(minutes);
+      datSec.textContent = tamerZero(seconds);
+     if(timerTime<=0)  {
+      clearInterval(id);
 
-  // Remaining days
-  const days = Math.floor(ms / day);
-  // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
-  return { days, hours, minutes, seconds };
+      Notiflix.Notify.info("job done time is up");
+    }
+  }, 1000);
 }
+function tamerZero(value) {
+  return String(value).padStart(2, '0');
+}
+
