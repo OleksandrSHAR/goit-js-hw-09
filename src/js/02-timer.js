@@ -35,7 +35,6 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     userData = selectedDates[0];
-    butStart.disabled = true;
     if (currentData < userData) {
         butStart.disabled = false;
         Notiflix.Notify.info("Great, now choose a date you don't want to miss😎");
