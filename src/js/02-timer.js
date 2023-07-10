@@ -27,14 +27,15 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
   return { days, hours, minutes, seconds };
 }
-
+ 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: currentData,
   minuteIncrement: 1,
   onClose(selectedDates) {
-      userData=selectedDates[0];
+    userData = selectedDates[0];
+    butStart.disabled = true;
     if (currentData < userData) {
         butStart.disabled = false;
         Notiflix.Notify.info("Great, now choose a date you don't want to miss😎");
