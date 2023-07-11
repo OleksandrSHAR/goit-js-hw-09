@@ -12,7 +12,7 @@ const datSec = document.querySelector("span[data-seconds]");
 
 butStart.classList.add("button--inactive");
 butStart.addEventListener("click", timer);
-
+butStart.disabled = true;
 const currentData = new Date()
 let userData;
 
@@ -27,7 +27,7 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
   return { days, hours, minutes, seconds };
 }
- 
+  
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -37,13 +37,12 @@ const options = {
     userData = selectedDates[0];
     if (currentData < userData) {
         butStart.disabled = false;
-        Notiflix.Notify.info("Great, now choose a date you don't want to miss😎");
-      } else if (currentData>userData) {
+      Notiflix.Notify.info("Great, now choose a date you don't want to miss😎");
+    } else if (currentData >= userData) {
       butStart.disabled = true;
-      Notiflix.Notify.warning("Error! I'm afraid the time machine hasn't been invented yet ¯\_(ツ)_/¯ ");
-        butStart.classList.remove("button--inactive");
+      Notiflix.Notify.warning("Error! I'm afraid the time machine hasn't been invented yet ¯|_(ツ)_|¯ ");
+      butStart.classList.remove("button--inactive");
       }
-    
   },
 };
 flatpickr(datPic, options)
@@ -57,14 +56,17 @@ function timer() {
       datHau.textContent = tamerZero(hours);
       datMin.textContent = tamerZero(minutes);
       datSec.textContent = tamerZero(seconds);
-     if(timerTime<=0)  {
+     
+    if (timerTime <= 0) {
       clearInterval(id);
-
+ 
       Notiflix.Notify.info("job done time is up");
+    } else {
+     timer.remove(timerTime) 
     }
   }, 1000);
 }
 function tamerZero(value) {
   return String(value).padStart(2, '0');
 }
-
+ 
