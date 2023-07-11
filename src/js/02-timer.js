@@ -16,6 +16,8 @@ butStart.disabled = true;
 const currentData = new Date()
 let userData;
 
+ 
+
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
@@ -45,6 +47,7 @@ const options = {
       }
   },
 };
+
 flatpickr(datPic, options)
 function timer() {
   const id = setInterval(() => {
@@ -56,14 +59,15 @@ function timer() {
       datHau.textContent = tamerZero(hours);
       datMin.textContent = tamerZero(minutes);
       datSec.textContent = tamerZero(seconds);
-     
+      datPic.disabled = true;
     if (timerTime <= 0) {
       clearInterval(id);
- 
+      datDay.textContent = '00';
+      datHau.textContent = '00';
+      datMin.textContent = '00';
+      datSec.textContent = '00';
       Notiflix.Notify.info("job done time is up");
-    } else {
-     timer.remove(timerTime) 
-    }
+    } 
   }, 1000);
 }
 function tamerZero(value) {

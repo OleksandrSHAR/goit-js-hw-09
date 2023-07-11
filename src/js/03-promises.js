@@ -25,17 +25,19 @@ function promisTim(e) {
   let delayVal = Number(delay.value);
   let stepVal = Number(step.value);
   let amountVal = Number(amount.value);
-
-  for (let i = 1; i <= amountVal; i+=1) {
-    let promiseDel = delayVal + stepVal * i;
-
-    createPromise(i, promiseDel)
+  let delayId ;
+  for (let i = 0; i <= amountVal; i+=1) {
+    //delayId = delayVal * i;
+      
+      delayId=delayVal + stepVal*i;
+   
+    createPromise(i+1,delayId )
   .then(({ position, delay }) => {
     Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
   })
   .catch(({ position, delay }) => {
     Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
   });
-    
+
   }
 }
